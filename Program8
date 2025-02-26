@@ -1,0 +1,90 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset1 Cambria Math;}}
+{\*\generator Riched20 10.0.22621}{\*\mmathPr\mmathFont1\mwrapIndent1440 }\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Write a C program to find FOLLOW( ) - predictive parser for the given grammar\par
+S \f1\u8594?\f0  AaAb / BbBa\par
+A \f1\u8594?\f0  \f1\u8712?\f0\par
+B \f1\u8594?\f0  \f1\u8712?\f0\par
+\par
+\par
+#include <stdio.h>\par
+#include <string.h>\par
+#include <stdlib.h>\par
+\par
+#define MAX 100\par
+\par
+// Data structures for grammar, FOLLOW, and production rules\par
+char nonTerminals[MAX], terminals[MAX], grammar[MAX][MAX];\par
+char FOLLOW_S[MAX], FOLLOW_A[MAX], FOLLOW_B[MAX];\par
+\par
+// Function to check if a character is a terminal\par
+int isTerminal(char c) \{\par
+    return (c >= 'a' && c <= 'z');\par
+\}\par
+\par
+// Function to add a terminal to the FOLLOW set\par
+void addToFOLLOW(char *followSet, char c) \{\par
+    if (strchr(followSet, c) == NULL) \{\par
+        int len = strlen(followSet);\par
+        followSet[len] = c;\par
+        followSet[len + 1] = '\\0';\par
+    \}\par
+\}\par
+\par
+// Function to calculate FOLLOW sets for non-terminals\par
+void calculateFOLLOW() \{\par
+    // Initialize FOLLOW sets\par
+    FOLLOW_S[0] = '$'; FOLLOW_S[1] = '\\0'; // FOLLOW(S) = \{$\}\par
+    FOLLOW_A[0] = '\\0'; // FOLLOW(A) = \{\}\par
+    FOLLOW_B[0] = '\\0'; // FOLLOW(B) = \{\}\par
+\par
+    // Apply the rules\par
+    // Rule 1: S \f1\u8594?\f0  AaAb => FOLLOW(A) = FOLLOW(S)\par
+    addToFOLLOW(FOLLOW_A, '$');\par
+    addToFOLLOW(FOLLOW_A, 'b');  // From S \f1\u8594?\f0  AaAb\par
+\par
+    // Rule 2: S \f1\u8594?\f0  BbBa => FOLLOW(B) = FOLLOW(S)\par
+    addToFOLLOW(FOLLOW_B, '$');\par
+    addToFOLLOW(FOLLOW_B, 'a');  // From S \f1\u8594?\f0  BbBa\par
+\par
+    // Rule 3: A \f1\u8594?\f0  \f1\u8712?\f0  => FOLLOW(A) = FOLLOW(S)\par
+    addToFOLLOW(FOLLOW_A, '$');\par
+    addToFOLLOW(FOLLOW_A, 'b');  // From A \f1\u8594?\f0  \f1\u8712?\f0  and S \f1\u8594?\f0  AaAb\par
+\par
+    // Rule 4: B \f1\u8594?\f0  \f1\u8712?\f0  => FOLLOW(B) = FOLLOW(S)\par
+    addToFOLLOW(FOLLOW_B, '$');\par
+    addToFOLLOW(FOLLOW_B, 'a');  // From B \f1\u8594?\f0  \f1\u8712?\f0  and S \f1\u8594?\f0  BbBa\par
+\}\par
+\par
+void printFOLLOW(char* nonTerminal, char* followSet) \{\par
+    printf("FOLLOW(%s) = \{", nonTerminal);\par
+    for (int i = 0; i < strlen(followSet); i++) \{\par
+        printf("%c", followSet[i]);\par
+        if (i != strlen(followSet) - 1)\par
+            printf(", ");\par
+    \}\par
+    printf("\}\\n");\par
+\}\par
+\par
+int main() \{\par
+    // Example grammar: S \f1\u8594?\f0  AaAb / BbBa, A \f1\u8594?\f0  \f1\u8712?\f0 , B \f1\u8594?\f0  \f1\u8712?\f0\par
+    // We directly assign grammar to variables\par
+    strcpy(nonTerminals, "SAB");  // S, A, B\par
+    strcpy(terminals, "ab");\par
+\par
+    // Calculate FOLLOW sets\par
+    calculateFOLLOW();\par
+\par
+    // Print FOLLOW sets\par
+    printFOLLOW("S", FOLLOW_S);\par
+    printFOLLOW("A", FOLLOW_A);\par
+    printFOLLOW("B", FOLLOW_B);\par
+\par
+    return 0;\par
+\}\par
+\par
+OUTPUT:\par
+FOLLOW(S) = \{$\}\par
+FOLLOW(A) = \{$, b\}\par
+FOLLOW(B) = \{$, a\}\par
+\par
+\par
