@@ -1,0 +1,61 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Implement a C program to eliminate left factoring from a given CFG.\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+#define MAX_PRODUCTIONS 10\par
+#define MAX_SYMBOLS 50\par
+#define MAX_LENGTH 50\par
+\par
+// Structure to store a production rule\par
+typedef struct \{\par
+    char lhs;                    // Left-hand side non-terminal\par
+    char rhs[MAX_PRODUCTIONS][MAX_LENGTH];  // Right-hand side alternatives\par
+    int num_rhs;                 // Number of alternatives\par
+\} Production;\par
+\par
+// Function to print the grammar\par
+void printGrammar(Production grammar[], int num_non_terminals) \{\par
+    for (int i = 0; i < num_non_terminals; i++) \{\par
+        printf("%c -> ", grammar[i].lhs);\par
+        for (int j = 0; j < grammar[i].num_rhs; j++) \{\par
+            printf("%s ", grammar[i].rhs[j]);\par
+            if (j != grammar[i].num_rhs - 1) \{\par
+                printf("| ");\par
+            \}\par
+        \}\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+// Function to perform left factoring on the given grammar\par
+void leftFactoring(Production grammar[], int *num_non_terminals) \{\par
+    for (int i = 0; i < *num_non_terminals; i++) \{\par
+        // Check for common prefixes in the productions\par
+        for (int j = i + 1; j < *num_non_terminals; j++) \{\par
+            if (grammar[i].lhs == grammar[j].lhs) \{\par
+                // Check common prefix between grammar[i] and grammar[j]\par
+                int prefix_len = 0;\par
+                while (prefix_len < grammar[i].num_rhs && prefix_len < grammar[j].num_rhs &&\par
+                       strncmp(grammar[i].rhs[0], grammar[j].rhs[0], prefix_len) == 0) \{\par
+                    prefix_len++;\par
+                \}\par
+\par
+                // If there's a common prefix, we need to factor it\par
+                if (prefix_len > 0) \{\par
+                    char new_non_terminal = 'A' + *num_non_terminals;  // New non-terminal\par
+                    grammar[*num_non_terminals].lhs = new_non_terminal;\par
+                    grammar[*num_non_terminals].num_rhs = 0;\par
+\par
+                    // Create the factored prefix\par
+                    char prefix[prefix_len + 1];\par
+                    strncpy(prefix, grammar[i].rhs[0], prefix_len);\par
+                    prefix[prefix_len] = '\\0';\par
+\par
+                    // Add the new non-terminal production\par
+                    sprintf(grammar[*num_non_terminals].rhs[grammar[*num_non_terminals].num_rhs], "%s", prefix);\par
+                    grammar[*num_non_terminals].num_rhs++;\par
+\par
+}
