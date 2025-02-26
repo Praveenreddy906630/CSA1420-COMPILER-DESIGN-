@@ -1,0 +1,34 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Develop a lexical Analyzer to identify whether a given line is a comment or not using C\par
+\par
+\par
+#include <stdio.h>\par
+#include <string.h>\par
+\par
+void checkComment(char *line) \{\par
+    if (line[0] == '/' && line[1] == '/') \{\par
+        printf("This is a single-line comment\\n");\par
+    \} else if (line[0] == '/' && line[1] == '*') \{\par
+        printf("This is a multi-line comment\\n");\par
+    \} else \{\par
+        printf("This is not a comment\\n");\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    char line[100];\par
+    printf("Enter a line of code: ");\par
+    fgets(line, sizeof(line), stdin);\par
+    checkComment(line);\par
+    return 0;\par
+\}\par
+\par
+OUTPUT:\par
+Enter a line of code: /*\par
+This is a multi-line comment\par
+\par
+\par
+=== Code Execution Successful ===\par
+                \par
+}
