@@ -1,0 +1,80 @@
+#include <stdio.h>\par
+#include <ctype.h>\par
+#include <string.h>\par
+\par
+#define MAX_TOKEN_LENGTH 100\par
+\par
+// Function prototypes\par
+void analyzeTokens(char *code);\par
+\par
+int main() \{\par
+    char code[] = "int main() \{ int a = 10 + 20; int b = a - 5 * 2 / 3; \}";\par
+\par
+    printf("Original Code:\\n%s\\n\\n", code);\par
+\par
+    analyzeTokens(code);\par
+\par
+    return 0;\par
+\}\par
+\par
+// Function to analyze tokens\par
+void analyzeTokens(char *code) \{\par
+    char token[MAX_TOKEN_LENGTH];\par
+    int index = 0;\par
+\par
+    printf("Tokens:\\n");\par
+    while (*code) \{\par
+        if (isalnum(*code) || *code == '_') \{\par
+            token[index++] = *code;\par
+        \} else \{\par
+            if (index > 0) \{\par
+                token[index] = '\\0';\par
+                printf("IDENTIFIER: %s\\n", token);\par
+                index = 0;\par
+            \}\par
+            if (strchr("+-*/", *code)) \{\par
+                printf("OPERATOR: %c\\n", *code);\par
+            \} else if (!isspace(*code)) \{\par
+                printf("OTHER: %c\\n", *code);\par
+            \}\par
+        \}\par
+        code++;\par
+    \}\par
+OUTPUT :\par
+Original Code:\par
+int main() \{ int a = 10 + 20; int b = a - 5 * 2 / 3; \}\par
+\par
+Tokens:\par
+IDENTIFIER: int\par
+IDENTIFIER: main\par
+OTHER: (\par
+OTHER: )\par
+OTHER: \{\par
+IDENTIFIER: int\par
+IDENTIFIER: a\par
+OTHER: =\par
+IDENTIFIER: 10\par
+OPERATOR: +\par
+IDENTIFIER: 20\par
+OTHER: ;\par
+IDENTIFIER: int\par
+IDENTIFIER: b\par
+OTHER: =\par
+IDENTIFIER: a\par
+OPERATOR: -\par
+IDENTIFIER: 5\par
+OPERATOR: *\par
+IDENTIFIER: 2\par
+OPERATOR: /\par
+IDENTIFIER: 3\par
+OTHER: ;\par
+OTHER: \}\par
+\par
+\par
+=== Code Execution Successful ===\par
+    if (index > 0) \{\par
+        token[index] = '\\0';\par
+        printf("IDENTIFIER: %s\\n", token);\par
+    \}\par
+\}\par
+}
