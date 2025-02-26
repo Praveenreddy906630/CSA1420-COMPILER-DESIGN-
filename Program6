@@ -1,0 +1,64 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Develop a lexical Analyzer to test whether a given identifier is valid or not using C.\par
+\par
+#include <stdio.h>\par
+#include <string.h>\par
+#include <ctype.h>\par
+\par
+#define MAX_IDENTIFIER_LENGTH 100\par
+\par
+// Function to check if the identifier is valid\par
+int isValidIdentifier(const char *identifier) \{\par
+    // Check if the identifier is empty or exceeds the maximum length\par
+    if (strlen(identifier) == 0 || strlen(identifier) > MAX_IDENTIFIER_LENGTH) \{\par
+        return 0; // Invalid\par
+    \}\par
+\par
+    // Check the first character\par
+    if (!isalpha(identifier[0]) && identifier[0] != '_') \{\par
+        return 0; // Invalid\par
+    \}\par
+\par
+    // Check the rest of the characters\par
+    for (int i = 1; i < strlen(identifier); i++) \{\par
+        if (!isalnum(identifier[i]) && identifier[i] != '_') \{\par
+            return 0; // Invalid\par
+        \}\par
+    \}\par
+\par
+    // List of reserved keywords (for simplicity, we can add more)\par
+    const char *keywords[] = \{\par
+        "int", "return", "if", "else", "while", "for", "break", "continue", "void", "char", "float", "double", "struct", "typedef", "static", "const", "enum", "goto", "switch", "case", "default", "sizeof", "volatile", "extern", "register", "union", "do", "break", "goto", "asm", "inline", "restrict", "sizeof", "typedef", "volatile", "const"\par
+    \};\par
+    int numKeywords = sizeof(keywords) / sizeof(keywords[0]);\par
+\par
+    // Check against reserved keywords\par
+    for (int i = 0; i < numKeywords; i++) \{\par
+        if (strcmp(identifier, keywords[i]) == 0) \{\par
+            return 0; // Invalid because it's a keyword\par
+        \}\par
+    \}\par
+\par
+    return 1; // Valid identifier\par
+\}\par
+\par
+int main() \{\par
+    char identifier[MAX_IDENTIFIER_LENGTH];\par
+\par
+    printf("Enter an identifier: ");\par
+    scanf("%s", identifier);\par
+\par
+    if (isValidIdentifier(identifier)) \{\par
+        printf("'%s' is a valid identifier.\\n", identifier);\par
+    \} else \{\par
+        printf("'%s' is not a valid identifier.\\n", identifier);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+\par
+OUTPUT:\par
+Enter an identifier: a\par
+'a' is a valid identifier.\par
+}
