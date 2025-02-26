@@ -1,0 +1,37 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Develop a lexical Analyzer to identify identifiers, constants, operators using C program. Give me small and simple code\par
+\par
+\par
+\par
+#include <stdio.h>\par
+#include <ctype.h>\par
+#include <string.h>\par
+\par
+void identify(char *token) \{\par
+    if (isalpha(token[0])) \{\par
+        printf("%s is an identifier\\n", token);\par
+    \} else if (isdigit(token[0])) \{\par
+        printf("%s is a constant\\n", token);\par
+    \} else \{\par
+        printf("%s is an operator\\n", token);\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    char code[] = "int a = 5 + 3;";\par
+    char *token = strtok(code, " ;=");\par
+    while (token != NULL) \{\par
+        identify(token);\par
+        token = strtok(NULL, " ;=");\par
+    \}\par
+    return 0;\par
+\}\par
+\par
+OUTPUT:\par
+int is an identifier\par
+a is an identifier\par
+5 is a constant\par
++ is an operator\par
+3 is a constant\par
+}
