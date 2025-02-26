@@ -1,0 +1,73 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset161 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Implement a C program to eliminate left factoring from a given CFG.\par
+\par
+#include <stdio.h>\par
+#include <string.h>\par
+#include <ctype.h>\par
+\par
+#define MAX_RULES 10\par
+#define MAX_LENGTH 50\par
+\par
+// Structure to store a production rule\par
+typedef struct \{\par
+    char lhs;\par
+    char rhs[MAX_RULES][MAX_LENGTH];\par
+    int rhs_count;\par
+\} Production;\par
+\par
+// Function to eliminate left recursion\par
+void eliminate_left_recursion(Production *rules, int *rule_count) \{\par
+    for (int i = 0; i < *rule_count; i++) \{\par
+        char non_terminal = rules[i].lhs;\par
+        char temp_rhs[MAX_RULES][MAX_LENGTH];\par
+        int temp_rhs_count = 0;\par
+        int left_recursive_index = -1;\par
+\par
+        // Identify if the production has left recursion\par
+        for (int j = 0; j < rules[i].rhs_count; j++) \{\par
+            if (rules[i].rhs[j][0] == non_terminal) \{\par
+                left_recursive_index = j;\par
+            \} else \{\par
+                strcpy(temp_rhs[temp_rhs_count], rules[i].rhs[j]);\par
+                temp_rhs_count++;\par
+            \}\par
+        \}\par
+\par
+        if (left_recursive_index != -1) \{\par
+            // Create new production for eliminating left recursion\par
+            char new_non_terminal = non_terminal + '1'; // E.g., A -> A' for A\par
+            printf("Eliminating left recursion for: %c\\n", non_terminal);\par
+            printf("%c -> ", non_terminal);\par
+\par
+            // Non-recursive production\par
+            for (int j = 0; j < temp_rhs_count; j++) \{\par
+                printf("%s | ", temp_rhs[j]);\par
+            \}\par
+            printf("%c'\\n", non_terminal);\par
+\par
+            printf("%c' -> ", new_non_terminal);\par
+\par
+            // Recursive production\par
+            for (int j = 0; j < rules[i].rhs_count; j++) \{\par
+                if (rules[i].rhs[j][0] == non_terminal) \{\par
+                    printf("%s%c' | ", rules[i].rhs[j] + 1, non_terminal);\par
+                \}\par
+            \}\par
+            printf("\f1\lang1032\'e5\\n");\par
+\par
+            // Create new rule for the modified grammar\par
+            rules[*rule_count].lhs = new_non_terminal;\par
+            for (int j = 0; j < temp_rhs_count; j++) \{\par
+                strcpy(rules[*rule_count].rhs[j], temp_rhs[j]);\par
+            \}\par
+            rules[*rule_count].rhs_count = temp_rhs_count;\par
+            (*rule_count)++;\par
+        \} else \{\par
+            printf("%c -> ", non_terminal);\par
+            for (int j = 0; j < rules[i].rhs_count; j++) \{\par
+                printf("%s | ", rules[i].rhs[j]);\par
+            \}\par
+            printf("\\n");\par
+        \}\f0\lang9\par
+}
