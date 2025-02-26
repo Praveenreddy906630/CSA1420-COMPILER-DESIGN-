@@ -1,0 +1,61 @@
+// Function prototypes\par
+void removeComments(char *code);\par
+void removeWhitespace(char *code);\par
+void analyzeTokens(char *code);\par
+\par
+int main() \{\par
+    char code[] = "/* This is a comment */ int main() \{ int a = 10; // Another comment\\n printf(\\"Hello, World!\\"); \\n return 0; \}";\par
+\par
+    printf("Original Code:\\n%s\\n\\n", code);\par
+\par
+    removeComments(code);\par
+    removeWhitespace(code);\par
+    analyzeTokens(code);\par
+\par
+    return 0;\par
+\}\par
+\par
+// Function to remove comments\par
+void removeComments(char *code) \{\par
+    char *p = code, *q = code;\par
+    int inComment = 0;\par
+\par
+    while (*p) \{\par
+        if (inComment) \{\par
+            if (*p == '*' && *(p + 1) == '/') \{\par
+                inComment = 0;\par
+                p += 2;\par
+            \} else \{\par
+                p++;\par
+            \}\par
+        \} else \{\par
+            if (*p == '/' && *(p + 1) == '*') \{\par
+                inComment = 1;\par
+                p += 2;\par
+            \} else if (*p == '/' && *(p + 1) == '/') \{\par
+                while (*p && *p != '\\n') p++;\par
+            \} else \{\par
+                *q++ = *p++;\par
+            \}\par
+        \}\par
+    \}\par
+    *q = '\\0';\par
+\}\par
+\par
+// Function to remove redundant spaces, tabs, and new lines\par
+void removeWhitespace(char *code) \{\par
+    char *p = code, *q = code;\par
+    int inWhitespace = 0;\par
+\par
+    while (*p) \{\par
+        if (isspace(*p)) \{\par
+            if (!inWhitespace) \{\par
+                *q++ = ' ';\par
+                inWhitespace = 1;\par
+            \}\par
+        \} else \{\par
+            *q++ = *p;\par
+            inWhitespace = 0;\par
+        \}\par
+}
+                                    
