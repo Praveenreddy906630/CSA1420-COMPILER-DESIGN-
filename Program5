@@ -1,0 +1,49 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Design a lexical Analyzer to find the number of whitespaces and newline characters using C.\par
+\par
+#include <stdio.h>\par
+\par
+void countWhitespaceAndNewlines(char *code, int *whitespaceCount, int *newlineCount);\par
+\par
+int main() \{\par
+    char code[] = "int main() \{\\n    int a = 10;  \\n    printf(\\"Hello, World!\\\\n\\");\\n    return 0; \\n\}";\par
+\par
+    int whitespaceCount = 0;\par
+    int newlineCount = 0;\par
+\par
+    printf("Original Code:\\n%s\\n\\n", code);\par
+\par
+    countWhitespaceAndNewlines(code, &whitespaceCount, &newlineCount);\par
+\par
+    printf("Number of Whitespaces: %d\\n", whitespaceCount);\par
+    printf("Number of Newline Characters: %d\\n", newlineCount);\par
+\par
+    return 0;\par
+\}\par
+\par
+void countWhitespaceAndNewlines(char *code, int *whitespaceCount, int *newlineCount) \{\par
+    while (*code) \{\par
+        if (*code == ' ' || *code == '\\t') \{\par
+            (*whitespaceCount)++;\par
+        \} else if (*code == '\\n') \{\par
+            (*newlineCount)++;\par
+        \}\par
+        code++;\par
+    \}\par
+\}\par
+OUTPUT:\par
+\par
+Original Code:\par
+int main() \{\par
+    int a = 10;  \par
+    printf("Hello, World!\\n");\par
+    return 0; \par
+\}\par
+\par
+Number of Whitespaces: 22\par
+Number of Newline Characters: 4\par
+\par
+\par
+=== Code Execution Successful ===\par
+}
